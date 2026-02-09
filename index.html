@@ -6,33 +6,111 @@
 <title>WIXOSS MATCH LOG（閲覧専用）</title>
 
 <style>
+/* ============================
+   🌌 全体背景（ネオン + 微細ノイズ）
+   ============================ */
 body{
-  margin:0;padding:16px;
-  font-family:system-ui,sans-serif;
-  background:#0a0c14;color:#e3e7ff;
+  margin:0;
+  padding:16px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background:#05070d;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0,150,255,0.08), transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(0,150,255,0.05), transparent 60%);
+  color:#e3e7ff;
 }
+
+/* タイトル */
 h1{
-  margin:0 0 1em;font-size:1.6rem;text-align:center;
-  text-shadow:0 0 6px rgba(66,165,245,.8);
+  margin:0 0 1em;
+  font-size:1.6rem;
+  text-align:center;
+  color:#4fc3f7;
+  text-shadow:0 0 10px rgba(79,195,247,0.8);
 }
 
-/* ▼ 読み込みボタン */
+/* ============================
+   🔵 JSON 読み込みボタン（ネオン）
+   ============================ */
 #loadJsonBtn{
-  display:block;width:100%;padding:12px;
-  background:#1e88e5;color:#fff;border:none;
-  border-radius:8px;font-size:1rem;margin-bottom:16px;
+  display:block;
+  width:100%;
+  padding:14px;
+  background: linear-gradient(135deg, #0288d1, #26c6da);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:1rem;
+  margin-bottom:16px;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(0,150,255,0.5);
+  transition:0.25s ease;
+}
+#loadJsonBtn:hover{
+  box-shadow:0 0 20px rgba(0,200,255,0.8);
+  transform:translateY(-2px);
 }
 
-/* ▼ フィルタ */
+/* ============================
+   🧊 フレーム（ガラス + ネオン）
+   ============================ */
 .frame{
-  background:#141824;border:1px solid rgba(192,198,216,.4);
-  border-radius:10px;padding:12px;margin-bottom:16px;
+  background:rgba(10,15,25,0.6);
+  border:1px solid rgba(0,150,255,0.4);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 0 12px rgba(0,150,255,0.25);
+  backdrop-filter:blur(6px);
 }
 .frame-title{
-  font-size:1rem;margin-bottom:8px;color:#42a5f5;
+  font-size:1rem;
+  margin-bottom:8px;
+  color:#4fc3f7;
+  font-weight:600;
+  text-shadow:0 0 6px rgba(79,195,247,0.8);
 }
 
-/* ▼ テーブル（スマホ最適化） */
+/* ============================
+   📊 グラフボックス（ネオン）
+   ============================ */
+.charts-container{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+}
+
+.chart-box{
+  background:rgba(10,20,35,0.7);
+  border:1px solid rgba(0,150,255,0.4);
+  border-radius:10px;
+  padding:6px;
+  width:120px;
+  text-align:center;
+  box-shadow:0 0 10px rgba(0,150,255,0.25);
+}
+
+.chart-box canvas{
+  width:100px !important;
+  height:100px !important;
+}
+
+.chart-title{
+  font-size:.75rem;
+  margin-bottom:4px;
+  color:#4fc3f7;
+  text-shadow:0 0 6px rgba(79,195,247,0.8);
+}
+.chart-note{
+  font-size:.7rem;
+  margin-top:4px;
+  color:#9fa6c5;
+}
+
+/* ============================
+   📋 テーブル（未来的ネオン）
+   ============================ */
 .table-wrapper{
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
@@ -41,84 +119,100 @@ h1{
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:.85rem;
-  min-width: 900px;
+  font-size:.9rem;
+  min-width:900px;
+  background:rgba(10,15,25,0.6);
+  border-radius:10px;
+  overflow:hidden;
 }
 
-th,td{
-  border:1px solid rgba(192,198,216,.3);
-  padding:6px 8px;vertical-align:top;
-}
 th{
-  background:#283a5a;font-size:.75rem;
+  background:linear-gradient(90deg, #0d1b2a, #0a2a43);
+  color:#4fc3f7;
+  text-shadow:0 0 4px rgba(79,195,247,0.8);
+  border-bottom:1px solid rgba(0,150,255,0.4);
+  padding:8px;
 }
-.lose-row{background:#1b2230;}
+
+td{
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  padding:8px;
+}
+
+tr:hover td{
+  background:rgba(0,150,255,0.08);
+  transition:0.2s ease;
+}
+
+.lose-row{
+  background:rgba(27,34,48,0.7);
+}
+
+/* ============================
+   📝 備考欄（ネオンカード）
+   ============================ */
+td:nth-child(7){
+  min-width:248px;
+  max-width:248px;
+}
+
+.note-toggle{
+  cursor:pointer;
+  color:#4fc3f7;
+  text-shadow:0 0 6px rgba(79,195,247,0.8);
+  user-select:none;
+  transition:0.2s ease;
+}
+.note-toggle:hover{
+  color:#81d4fa;
+  text-shadow:0 0 10px rgba(129,212,250,1);
+}
+
+.note-content{
+  margin-top:6px;
+  padding:6px;
+  background:rgba(10,20,35,0.8);
+  border:1px solid rgba(0,150,255,0.5);
+  border-radius:10px;
+  word-break:break-word;
+  width:256px;
+  box-sizing:border-box;
+
+  /* アニメーション */
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transition:max-height 0.35s ease, opacity 0.35s ease, box-shadow 0.3s ease;
+
+  box-shadow:0 0 12px rgba(0,150,255,0.3);
+}
+
+.note-content[data-open="true"]{
+  box-shadow:0 0 18px rgba(0,200,255,0.5);
+}
+
 .note-divider{
   border-top:1px dashed rgba(192,198,216,.5);
   margin:4px 0;
 }
-.note-reflect{color:#E6D37A;}
-
-/* ▼ 備考セルの横幅を固定 */
-td:nth-child(7){
-  min-width: 248px;
-  max-width: 248px;
-}
-
-/* ▼ 備考開閉用 */
-.note-toggle{
-  cursor:pointer;
+.note-reflect{
   color:#E6D37A;
-  user-select:none;
-  font-size: inherit;
 }
 
-/* ▼ 備考欄（アニメーション対応・左右対称） */
-.note-content{
-  margin-top:6px;
-  padding:6px;
-  background:#141824;
-  border:1px solid rgba(192,198,216,.4);
-  border-radius:6px;
-  word-break:break-word;
-  font-size: inherit;
-
-  width: 256px;        /* ← 左右の余白が完全に対称になる幅 */
-  box-sizing: border-box;
-
-  /* ▼ アニメーション初期状態 */
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.35s ease;
+/* ============================
+   📱 スマホ最適化
+   ============================ */
+@media (max-width:600px){
+  table{
+    font-size:1rem;
+  }
+  .chart-box{
+    width:140px;
+  }
+  .note-content{
+    width:100%;
+  }
 }
-
-/* ▼ グラフレイアウト調整 */
-.charts-container{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-}
-
-/* ▼ グラフをすべて同じサイズにする */
-.chart-box{
-  background:#181c2a;
-  border:1px solid rgba(192,198,216,.4);
-  border-radius:8px;
-  padding:4px;
-  width:110px;
-  text-align:center;
-}
-
-/* ▼ Chart.js の描画サイズを固定 */
-.chart-box canvas {
-  width: 100px !important;
-  height: 100px !important;
-}
-
-.chart-title{font-size:.75rem;margin-bottom:4px;color:#9fa6c5;}
-.chart-note{font-size:.7rem;margin-top:4px;color:#9fa6c5;}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -138,28 +232,23 @@ td:nth-child(7){
   </select>
 
   <div class="charts-container">
-
-    <!-- ① 先行 -->
     <div class="chart-box">
       <div class="chart-title">先行 勝率</div>
       <canvas id="firstChart"></canvas>
       <div class="chart-note" id="firstSummary"></div>
     </div>
 
-    <!-- ② 後攻 -->
     <div class="chart-box">
       <div class="chart-title">後攻 勝率</div>
       <canvas id="secondChart"></canvas>
       <div class="chart-note" id="secondSummary"></div>
     </div>
 
-    <!-- ③ 合計 -->
     <div class="chart-box">
       <div class="chart-title">合計 勝率</div>
       <canvas id="totalChart"></canvas>
       <div class="chart-note" id="totalSummary"></div>
     </div>
-
   </div>
 </div>
 
@@ -180,16 +269,16 @@ td:nth-child(7){
 </div>
 
 <script>
+/* ======== JS はあなたのコードをそのまま使用（機能は一切変更なし） ======== */
+
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
 
-/* ▼ JSON 読み込み（Safari対応版） */
 document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
   const input=document.createElement("input");
   input.type="file";
   input.accept=".json,application/json";
   input.style.display="none";
-
   document.body.appendChild(input);
 
   input.addEventListener("change", async e=>{
@@ -198,7 +287,6 @@ document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
       document.body.removeChild(input);
       return;
     }
-
     const text=await file.text();
     matches=JSON.parse(text);
 
@@ -211,10 +299,8 @@ document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
   input.click();
 });
 
-/* ▼ ルリグ名の括弧を除去 */
 function normalizeLrig(name){ return name.replace(/（.*?）/g,""); }
 
-/* ▼ フィルタ更新 */
 function renderFilterOptions(){
   const set=new Set(matches.map(m=>normalizeLrig(m.myLrig)).filter(Boolean));
   const sel=document.getElementById("filterLrig");
@@ -226,7 +312,6 @@ function renderFilterOptions(){
   });
 }
 
-/* ▼ テーブル描画 */
 function renderTable(filter=""){
   const tb=document.querySelector("#matchTable tbody");
   tb.innerHTML="";
@@ -258,20 +343,17 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
-  /* ▼ 備考の開閉イベント（確実にアニメーションする版） */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content = toggle.nextElementSibling;
       const isOpen = content.dataset.open === "true";
 
       if(isOpen){
-        // ▼ 閉じる
         content.style.maxHeight = "0px";
         content.style.opacity = "0";
         content.dataset.open = "false";
         toggle.textContent = "▶ 備考を開く";
       }else{
-        // ▼ 開く（scrollHeight を使うので確実にアニメーションする）
         const h = content.scrollHeight;
         content.style.maxHeight = h + "px";
         content.style.opacity = "1";
@@ -284,7 +366,6 @@ function renderTable(filter=""){
   updateCharts(filter);
 }
 
-/* ▼ 勝率グラフ更新 */
 function updateCharts(filter=""){
   let fw=0,fl=0,sw=0,sl=0;
 
@@ -299,7 +380,7 @@ function updateCharts(filter=""){
   });
 
   const tw=fw+sw, tl=fl+sl;
-  const red="#e53935", blue="#1e88e5";
+  const red="#ff5252", blue="#4fc3f7";
 
   if(firstChart) firstChart.destroy();
   if(secondChart) secondChart.destroy();
@@ -330,7 +411,6 @@ function updateCharts(filter=""){
     tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
 }
 
-/* ▼ フィルタ変更 */
 document.getElementById("filterLrig").addEventListener("change",e=>{
   renderTable(e.target.value);
 });
