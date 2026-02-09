@@ -63,7 +63,7 @@ th{
 /* 備考欄を広めに */
 td:nth-child(7){
   min-width: 260px;
-  position: relative; /* ← ポップアップの基準点にする */
+  position: relative;
 }
 
 /* ▼ 備考開閉用 */
@@ -71,7 +71,7 @@ td:nth-child(7){
   cursor:pointer;
   color:#E6D37A;
   user-select:none;
-  font-size: inherit; /* ← 他と同じ文字サイズ */
+  font-size: inherit;
 }
 
 /* ▼ 備考ポップアップ（行の高さを変えない） */
@@ -85,19 +85,34 @@ td:nth-child(7){
   padding:8px;
   border-radius:6px;
   z-index:10;
-  max-width:220px;     /* ← 横幅を狭くして読みやすく */
+  max-width:220px;
   word-break:break-word;
-  font-size: inherit;  /* ← 他と同じ文字サイズ */
+  font-size: inherit;
 }
 
-/* ▼ グラフ */
+/* ▼ グラフレイアウト調整 */
 .charts-container{
-  display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
 }
+
+/* 合計は1段目で横幅いっぱい */
+.chart-box:first-child{
+  width:100%;
+}
+
+/* グラフを小さくする */
 .chart-box{
-  background:#181c2a;border:1px solid rgba(192,198,216,.4);
-  border-radius:8px;padding:8px;width:160px;text-align:center;
+  background:#181c2a;
+  border:1px solid rgba(192,198,216,.4);
+  border-radius:8px;
+  padding:8px;
+  width:130px;   /* ← 小さくした */
+  text-align:center;
 }
+
 .chart-title{font-size:.75rem;margin-bottom:4px;color:#9fa6c5;}
 .chart-note{font-size:.7rem;margin-top:4px;color:#9fa6c5;}
 </style>
