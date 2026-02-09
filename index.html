@@ -33,19 +33,9 @@ h1{
 }
 
 /* ▼ テーブル（スマホ最適化） */
-.table-wrapper{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-}
-
-/* ←← ここが重要：テーブル幅を固定して縮ませない */
 table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:.85rem;
-  min-width: 900px; /* ★ 追加：スマホで横スクロールさせる */
+  width:100%;border-collapse:collapse;font-size:.85rem;
 }
-
 th,td{
   border:1px solid rgba(192,198,216,.3);
   padding:6px 8px;vertical-align:top;
@@ -60,9 +50,10 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* 備考欄を広めに（任意） */
-td:nth-child(7){
-  min-width: 260px;
+/* ▼ テーブルを横スクロール可能に */
+.table-wrapper{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ▼ グラフ */
