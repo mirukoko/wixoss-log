@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WIXOSS MATCH LOG（閲覧専用）</title>
+
+<style>
+body{
+  margin:0;padding:16px;
+  font-family:system-ui,sans-serif;
+  background:#0a0c14;color:#e3e7ff;
+}
+h1{
+  margin:0 0 1em;font-size:1.6rem;text-align:center;
+  text-shadow:0 0 6px rgba(66,165,245,.8);
+}
+
+/* ▼ 読み込みボタン */
+#loadJsonBtn{
+  display:block;width:100%;padding:12px;
+  background:#1e88e5;color:#fff;border:none;
+  border-radius:8px;font-size:1rem;margin-bottom:16px;
+}
+
+/* ▼ フィルタ */
+.frame{
+  background:#141824;border:1px solid rgba(192,198,216,.4);
+  border-radius:10px;padding:12px;margin-bottom:16px;
+}
+.frame-title{
+  font-size:1rem;margin-bottom:8px;color:#42a5f5;
+}
+
+/* ▼ テーブル（スマホ最適化） */
+table{
+  width:100%;border-collapse:collapse;font-size:.85rem;
+}
+th,td{
+  border:1px solid rgba(192,198,216,.3);
+  padding:6px 8px;vertical-align:top;
+}
+th{
+  background:#283a5a;font-size:.75rem;
+}
+.lose-row{background:#1b2230;}
+.note-divider{
+  border-top:1px dashed rgba(192,198,216,.5);
+  margin:4px 0;
+}
+.note-reflect{color:#E6D37A;}
+
+/* ▼ テーブルを横スクロール可能に */
+.table-wrapper{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* ▼ グラフ */
+.charts-container{
+  display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;
+}
+.chart-box{
+  background:#181c2a;border:1px solid rgba(192,198,216,.4);
+  border-radius:8px;padding:8px;width:160px;text-align:center;
+}
+.chart-title{font-size:.75rem;margin-bottom:4px;color:#9fa6c5;}
+.chart-note{font-size:.7rem;margin-top:4px;color:#9fa6c5;}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<h1>WIXOSS MATCH LOG（閲覧専用）</h1>
+
+<button id="loadJsonBtn">JSON を読み込む（OneDrive から選択）</button>
+
+<!-- ▼ FILTER -->
+<div class="frame">
+  <div class="frame-title">FILTER</div>
+  <select id="filterLrig" style="width:100%;padding:8px;border-radius:6px;">
+    <option value="">（すべて表示）</option>
+  </select>
+
+  <div class="charts-container">
+    <div class="chart-box">
+      <div class="chart-title">合計 勝率</div>
+      <canvas id="totalChart"></canvas>
+      <div class="chart-note" id="totalSummary"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">先行 勝率</div>
+      <canvas id="firstChart"></canvas>
+      <div class="chart-note" id="firstSummary"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">後攻 勝率</div>
+      <canvas id="secondChart"></canvas>
+      <div class="chart-note" id="secondSummary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ▼ MATCH LOG -->
+<div class="frame">
+  <div class="frame-title">MATCH LOG</div>
+  <div class="table-wrapper">
+    <table id="matchTable">
+      <thead>
+        <tr>
+          <th>日付</th><th>場所</th><th>自分</th><th>相手</th>
+          <th>先後</th><th>勝敗</th><th>備考</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let matches=[];
+let firstChart=null, secondChart=null, totalChart=null;
+
+/* ▼ JSON 読み込み */
+document.getElementById("loadJsonBtn").addEventListener("click", async ()=>{
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json,application/json";
+
+  input.onchange=async e=>{
+    const file=e.target.files[0];
+    if(!file) return;
+
+    const text=await file.text();
+    matches=JSON.parse(text);
+
+    renderFilterOptions();
+    renderTable();
+  };
+
+  input.click();
+});
+
+/* ▼ ルリグ名の括弧を除去 */
+function normalizeLrig(name){ return name.replace(/（.*?）/g,""); }
+
+/* ▼ フィルタ更新 */
+function renderFilterOptions(){
+  const set=new Set(matches.map(m=>normalizeLrig(m.myLrig)).filter(Boolean));
+  const sel=document.getElementById("filterLrig");
+  sel.innerHTML='<option value="">（すべて表示）</option>';
+  set.forEach(l=>{
+    const o=document.createElement("option");
+    o.value=l; o.textContent=l;
+    sel.appendChild(o);
+  });
+}
+
+/* ▼ テーブル描画 */
+function renderTable(filter=""){
+  const tb=document.querySelector("#matchTable tbody");
+  tb.innerHTML="";
+
+  matches.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  matches.forEach(m=>{
+    if(filter && normalizeLrig(m.myLrig)!==filter) return;
+
+    const tr=document.createElement("tr");
+    if(m.result==="負け") tr.classList.add("lose-row");
+
+    tr.innerHTML=`
+      <td>${m.date}</td>
+      <td>${m.place}</td>
+      <td>${m.myLrig}</td>
+      <td>${m.oppLrig}</td>
+      <td>${m.order}</td>
+      <td>${m.result}</td>
+      <td>
+        <div>📝 ${m.noteResult||""}</div>
+        <div class="note-divider"></div>
+        <div class="note-reflect">💡 ${m.noteReflect||""}</div>
+      </td>
+    `;
+    tb.appendChild(tr);
+  });
+
+  updateCharts(filter);
+}
+
+/* ▼ 勝率グラフ更新 */
+function updateCharts(filter=""){
+  let fw=0,fl=0,sw=0,sl=0;
+
+  matches.forEach(m=>{
+    if(filter && normalizeLrig(m.myLrig)!==filter) return;
+
+    if(m.order==="先行"){
+      if(m.result==="勝ち") fw++; else fl++;
+    } else {
+      if(m.result==="勝ち") sw++; else sl++;
+    }
+  });
+
+  const tw=fw+sw, tl=fl+sl;
+  const red="#e53935", blue="#1e88e5";
+
+  if(firstChart) firstChart.destroy();
+  if(secondChart) secondChart.destroy();
+  if(totalChart) totalChart.destroy();
+
+  totalChart=new Chart(document.getElementById("totalChart"),{
+    type:"doughnut",
+    data:{labels:["勝ち","負け"],datasets:[{data:[tw,tl],backgroundColor:[red,blue]}]}
+  });
+
+  firstChart=new Chart(document.getElementById("firstChart"),{
+    type:"doughnut",
+    data:{labels:["勝ち","負け"],datasets:[{data:[fw,fl],backgroundColor:[red,blue]}]}
+  });
+
+  secondChart=new Chart(document.getElementById("secondChart"),{
+    type:"doughnut",
+    data:{labels:["勝ち","負け"],datasets:[{data:[sw,sl],backgroundColor:[red,blue]}]}
+  });
+
+  document.getElementById("totalSummary").textContent =
+    tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
+
+  document.getElementById("firstSummary").textContent =
+    fw+fl ? `勝率 ${Math.round(fw/(fw+fl)*100)}%` : "データなし";
+
+  document.getElementById("secondSummary").textContent =
+    sw+sl ? `勝率 ${Math.round(sw/(sw+sl)*100)}%` : "データなし";
+}
+
+/* ▼ フィルタ変更 */
+document.getElementById("filterLrig").addEventListener("change",e=>{
+  renderTable(e.target.value);
+});
+</script>
+
+</body>
+</html>
