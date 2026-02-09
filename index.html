@@ -143,22 +143,30 @@ td:nth-child(7){
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
 
-/* ▼ JSON 読み込み */
-document.getElementById("loadJsonBtn").addEventListener("click", async ()=>{
+/* ▼ JSON 読み込み（Safari対応版） */
+document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
   const input=document.createElement("input");
   input.type="file";
   input.accept=".json,application/json";
+  input.style.display="none";
 
-  input.onchange=async e=>{
+  document.body.appendChild(input);
+
+  input.addEventListener("change", async e=>{
     const file=e.target.files[0];
-    if(!file) return;
+    if(!file){
+      document.body.removeChild(input);
+      return;
+    }
 
     const text=await file.text();
     matches=JSON.parse(text);
 
     renderFilterOptions();
     renderTable();
-  };
+
+    document.body.removeChild(input);
+  });
 
   input.click();
 });
