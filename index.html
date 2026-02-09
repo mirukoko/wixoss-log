@@ -73,9 +73,8 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考欄（左右対称になるように調整済み） */
+/* ▼ 備考欄（アニメーション対応・左右対称） */
 .note-content{
-  display:none;
   margin-top:6px;
   padding:6px;
   background:#141824;
@@ -86,6 +85,18 @@ td:nth-child(7){
 
   width: 256px;        /* ← 左右の余白が完全に対称になる幅 */
   box-sizing: border-box;
+
+  /* ▼ アニメーション初期状態 */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease;
+}
+
+/* ▼ 開いた状態（アニメーション後） */
+.note-content.open{
+  max-height: 500px;  /* 内容に合わせて十分大きく */
+  opacity: 1;
 }
 
 /* ▼ グラフレイアウト調整 */
@@ -253,13 +264,13 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
-  /* ▼ 備考の開閉イベント */
+  /* ▼ 備考の開閉イベント（アニメーション対応） */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content=toggle.nextElementSibling;
-      const isOpen=content.style.display==="block";
+      const isOpen=content.classList.contains("open");
 
-      content.style.display=isOpen?"none":"block";
+      content.classList.toggle("open", !isOpen);
       toggle.textContent=isOpen?"▶ 備考を開く":"▼ 備考を閉じる";
     });
   });
