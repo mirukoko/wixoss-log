@@ -7,21 +7,21 @@
 
 <style>
 /* ============================
-   全体（白背景・黒文字）
+   全体（ダーク背景・白文字）
 ============================ */
 body{
   margin:0;
   padding:16px;
   font-family:system-ui,sans-serif;
-  background:#ffffff;
-  color:#000000;
+  background:#0a0c14;
+  color:#e3e7ff;
 }
 
 h1{
   margin:0 0 1em;
   font-size:1.6rem;
   text-align:center;
-  color:#1e88e5;
+  color:#42a5f5;
 }
 
 /* ============================
@@ -40,11 +40,11 @@ h1{
 }
 
 /* ============================
-   フレーム（白背景に合わせて軽量）
+   フレーム（元の色に近い軽量版）
 ============================ */
 .frame{
-  background:#f5f7fa;
-  border:1px solid rgba(0,0,0,.15);
+  background:#141824;
+  border:1px solid rgba(192,198,216,.4);
   border-radius:10px;
   padding:12px;
   margin-bottom:16px;
@@ -53,11 +53,11 @@ h1{
 .frame-title{
   font-size:1rem;
   margin-bottom:8px;
-  color:#1e88e5;
+  color:#42a5f5;
 }
 
 /* ============================
-   グラフ（元の配置を維持）
+   グラフ（元の配置）
 ============================ */
 .charts-container{
   display:flex;
@@ -67,8 +67,8 @@ h1{
 }
 
 .chart-box{
-  background:#ffffff;
-  border:1px solid rgba(0,0,0,.15);
+  background:#181c2a;
+  border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
   padding:4px;
   width:110px;
@@ -83,17 +83,17 @@ h1{
 .chart-title{
   font-size:.75rem;
   margin-bottom:4px;
-  color:#333333;
+  color:#9fa6c5;
 }
 
 .chart-note{
   font-size:.7rem;
   margin-top:4px;
-  color:#666666;
+  color:#9fa6c5;
 }
 
 /* ============================
-   テーブル（白背景用）
+   テーブル（元の色を維持）
 ============================ */
 .table-wrapper{
   overflow-x:auto;
@@ -105,32 +105,30 @@ table{
   border-collapse:collapse;
   font-size:.85rem;
   min-width:900px;
-  background:#ffffff;
 }
 
 th{
-  background:#e3e9f0;
-  color:#000000;
+  background:#283a5a;
   font-size:.75rem;
   padding:6px 8px;
-  border-bottom:1px solid rgba(0,0,0,0.15);
+  border:1px solid rgba(192,198,216,.3);
 }
 
 td{
   padding:6px 8px;
-  border-bottom:1px solid rgba(0,0,0,0.08);
+  border:1px solid rgba(192,198,216,.3);
 }
 
 tr:hover td{
-  background:#f0f4f8;
+  background:#1a2330;
 }
 
 .lose-row{
-  background:#f7eaea;
+  background:#1b2230;
 }
 
 /* ============================
-   備考欄（白背景用）
+   備考欄（元の色 × 軽量）
 ============================ */
 td:nth-child(7){
   min-width:248px;
@@ -139,15 +137,15 @@ td:nth-child(7){
 
 .note-toggle{
   cursor:pointer;
-  color:#1e88e5;
+  color:#E6D37A;
   user-select:none;
 }
 
 .note-content{
   margin-top:6px;
   padding:6px;
-  background:#ffffff;
-  border:1px solid rgba(0,0,0,.15);
+  background:#141824;
+  border:1px solid rgba(192,198,216,.4);
   border-radius:6px;
   width:256px;
   box-sizing:border-box;
@@ -159,12 +157,12 @@ td:nth-child(7){
 }
 
 .note-divider{
-  border-top:1px dashed rgba(0,0,0,.25);
+  border-top:1px dashed rgba(192,198,216,.5);
   margin:4px 0;
 }
 
 .note-reflect{
-  color:#8a6d00;
+  color:#E6D37A;
 }
 
 /* ============================
@@ -198,21 +196,18 @@ td:nth-child(7){
 
   <div class="charts-container">
 
-    <!-- ① 先行 -->
     <div class="chart-box">
       <div class="chart-title">先行 勝率</div>
       <canvas id="firstChart"></canvas>
       <div class="chart-note" id="firstSummary"></div>
     </div>
 
-    <!-- ② 後攻 -->
     <div class="chart-box">
       <div class="chart-title">後攻 勝率</div>
       <canvas id="secondChart"></canvas>
       <div class="chart-note" id="secondSummary"></div>
     </div>
 
-    <!-- ③ 合計 -->
     <div class="chart-box">
       <div class="chart-title">合計 勝率</div>
       <canvas id="totalChart"></canvas>
@@ -239,7 +234,7 @@ td:nth-child(7){
 </div>
 
 <script>
-/* ======== JS（機能は一切変更なし） ======== */
+/* ======== JS（機能はそのまま） ======== */
 
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
