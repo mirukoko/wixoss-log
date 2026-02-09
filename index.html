@@ -93,12 +93,6 @@ td:nth-child(7){
   transition: max-height 0.35s ease, opacity 0.35s ease;
 }
 
-/* ▼ 開いた状態（アニメーション後） */
-.note-content.open{
-  max-height: 500px;  /* 内容に合わせて十分大きく */
-  opacity: 1;
-}
-
 /* ▼ グラフレイアウト調整 */
 .charts-container{
   display:flex;
@@ -254,7 +248,7 @@ function renderTable(filter=""){
       <td>${m.result}</td>
       <td>
         <div class="note-toggle">▶ 備考を開く</div>
-        <div class="note-content">
+        <div class="note-content" data-open="false">
           <div>📝 ${m.noteResult || ""}</div>
           <div class="note-divider"></div>
           <div class="note-reflect">💡 ${m.noteReflect || ""}</div>
@@ -264,14 +258,26 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
-  /* ▼ 備考の開閉イベント（アニメーション対応） */
+  /* ▼ 備考の開閉イベント（確実にアニメーションする版） */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
-      const content=toggle.nextElementSibling;
-      const isOpen=content.classList.contains("open");
+      const content = toggle.nextElementSibling;
+      const isOpen = content.dataset.open === "true";
 
-      content.classList.toggle("open", !isOpen);
-      toggle.textContent=isOpen?"▶ 備考を開く":"▼ 備考を閉じる";
+      if(isOpen){
+        // ▼ 閉じる
+        content.style.maxHeight = "0px";
+        content.style.opacity = "0";
+        content.dataset.open = "false";
+        toggle.textContent = "▶ 備考を開く";
+      }else{
+        // ▼ 開く（scrollHeight を使うので確実にアニメーションする）
+        const h = content.scrollHeight;
+        content.style.maxHeight = h + "px";
+        content.style.opacity = "1";
+        content.dataset.open = "true";
+        toggle.textContent = "▼ 備考を閉じる";
+      }
     });
   });
 
