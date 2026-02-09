@@ -38,7 +38,6 @@ h1{
   -webkit-overflow-scrolling:touch;
 }
 
-/* ← テーブル幅を固定して横スクロールを発生させる */
 table{
   width:100%;
   border-collapse:collapse;
@@ -60,7 +59,6 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* 備考欄を広めに */
 td:nth-child(7){
   min-width: 260px;
   position: relative;
@@ -74,7 +72,7 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考ポップアップ（行の高さを変えない） */
+/* ▼ 備考ポップアップ */
 .note-content{
   display:none;
   position:absolute;
@@ -94,7 +92,7 @@ td:nth-child(7){
 .charts-container{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  gap:8px;               /* ← 余白をさらに狭く */
   justify-content:center;
 }
 
@@ -103,13 +101,13 @@ td:nth-child(7){
   width:100%;
 }
 
-/* グラフを小さくする */
+/* グラフを小さくし、横余白を削る */
 .chart-box{
   background:#181c2a;
   border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
-  padding:8px;
-  width:130px;   /* ← 小さくした */
+  padding:4px;           /* ← 8px → 4px に変更（余白削減） */
+  width:110px;           /* ← 130px → 110px に変更（さらに小さく） */
   text-align:center;
 }
 
@@ -247,7 +245,6 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
-  /* ▼ 備考の開閉イベント */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content=toggle.nextElementSibling;
