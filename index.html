@@ -59,10 +59,10 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* ▼ 備考セルの横幅を固定（展開前後で変わらない） */
+/* ▼ 備考セルの横幅を固定（左右対称のため） */
 td:nth-child(7){
-  min-width: 240px;
-  max-width: 240px;   /* ← note-content と完全一致 */
+  min-width: 248px;
+  max-width: 248px;
 }
 
 /* ▼ 備考開閉用 */
@@ -73,7 +73,7 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考欄（セル内で展開・横幅固定） */
+/* ▼ 備考欄（セル内で展開・左右対称） */
 .note-content{
   display:none;
   margin-top:6px;
@@ -84,7 +84,7 @@ td:nth-child(7){
   word-break:break-word;
   font-size: inherit;
 
-  width: 240px;        /* ← セルと完全一致（重要） */
+  width: 248px;        /* ← 外枠と左右対称になる幅 */
   box-sizing: border-box;
 }
 
