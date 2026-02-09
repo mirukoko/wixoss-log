@@ -16,6 +16,13 @@ h1{
   text-shadow:0 0 6px rgba(66,165,245,.8);
 }
 
+/* ▼ 読み込みボタン */
+#loadJsonBtn{
+  display:block;width:100%;padding:12px;
+  background:#1e88e5;color:#fff;border:none;
+  border-radius:8px;font-size:1rem;margin-bottom:16px;
+}
+
 /* ▼ フィルタ */
 .frame{
   background:#141824;border:1px solid rgba(192,198,216,.4);
@@ -26,9 +33,19 @@ h1{
 }
 
 /* ▼ テーブル（スマホ最適化） */
-table{
-  width:100%;border-collapse:collapse;font-size:.85rem;
+.table-wrapper{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
+
+/* ←← ここが重要：テーブル幅を固定して縮ませない */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.85rem;
+  min-width: 900px; /* ★ 追加：スマホで横スクロールさせる */
+}
+
 th,td{
   border:1px solid rgba(192,198,216,.3);
   padding:6px 8px;vertical-align:top;
@@ -43,10 +60,9 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* ▼ テーブルを横スクロール可能に */
-.table-wrapper{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
+/* 備考欄を広めに（任意） */
+td:nth-child(7){
+  min-width: 260px;
 }
 
 /* ▼ グラフ */
@@ -67,6 +83,8 @@ th{
 <body>
 
 <h1>WIXOSS MATCH LOG（閲覧専用）</h1>
+
+<button id="loadJsonBtn">JSON を読み込む（OneDrive から選択）</button>
 
 <!-- ▼ FILTER -->
 <div class="frame">
@@ -114,29 +132,24 @@ th{
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
 
-/* ▼ あなたの OneDrive JSON の URL */
-const JSON_URL =
-  "https://1drv.ms/u/c/a1cb9e417ec5a907/IQBLQieOtaodSazekWHk2A6VAeszPTNmUAEsjk7UV4f98Lc?e=U2b9Ms";
+/* ▼ JSON 読み込み */
+document.getElementById("loadJsonBtn").addEventListener("click", async ()=>{
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json,application/json";
 
-/* ▼ OneDrive から JSON を読み込む */
-async function loadJson(){
-  try{
-    const res = await fetch(JSON_URL, { cache: "no-cache" });
-    if(!res.ok) throw new Error("HTTP " + res.status);
+  input.onchange=async e=>{
+    const file=e.target.files[0];
+    if(!file) return;
 
-    matches = await res.json();
+    const text=await file.text();
+    matches=JSON.parse(text);
 
     renderFilterOptions();
     renderTable();
-  }catch(err){
-    console.error(err);
-    alert("JSON を読み込めませんでした。\nOneDrive の共有リンクを確認してください。");
-  }
-}
+  };
 
-/* ▼ ページを開いた瞬間に自動読み込み */
-window.addEventListener("DOMContentLoaded", () => {
-  loadJson();
+  input.click();
 });
 
 /* ▼ ルリグ名の括弧を除去 */
