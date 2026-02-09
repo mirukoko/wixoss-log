@@ -59,10 +59,10 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* ▼ 備考セルの横幅を固定（画面が動かないようにする） */
+/* ▼ 備考セルの横幅を固定（展開前後で変わらない） */
 td:nth-child(7){
-  min-width: 260px;
-  max-width: 260px;   /* ← 横幅固定（重要） */
+  min-width: 240px;
+  max-width: 240px;   /* ← note-content と完全一致 */
 }
 
 /* ▼ 備考開閉用 */
@@ -84,7 +84,7 @@ td:nth-child(7){
   word-break:break-word;
   font-size: inherit;
 
-  width: 240px;        /* ← 横幅固定（展開前後で変わらない） */
+  width: 240px;        /* ← セルと完全一致（重要） */
   box-sizing: border-box;
 }
 
