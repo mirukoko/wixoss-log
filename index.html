@@ -61,7 +61,6 @@ th{
 
 td:nth-child(7){
   min-width: 260px;
-  position: relative;
 }
 
 /* ▼ 備考開閉用 */
@@ -72,18 +71,14 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考ポップアップ */
+/* ▼ 備考欄（セル内で自然に展開） */
 .note-content{
   display:none;
-  position:absolute;
-  top:24px;
-  left:0;
+  margin-top:6px;
+  padding:6px;
   background:#141824;
   border:1px solid rgba(192,198,216,.4);
-  padding:8px;
   border-radius:6px;
-  z-index:10;
-  max-width:220px;
   word-break:break-word;
   font-size: inherit;
 }
@@ -102,11 +97,11 @@ td:nth-child(7){
   border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
   padding:4px;
-  width:110px;   /* ← 全グラフ共通サイズ */
+  width:110px;
   text-align:center;
 }
 
-/* ▼ Chart.js の描画サイズを固定（重要） */
+/* ▼ Chart.js の描画サイズを固定 */
 .chart-box canvas {
   width: 100px !important;
   height: 100px !important;
@@ -133,21 +128,28 @@ td:nth-child(7){
   </select>
 
   <div class="charts-container">
-    <div class="chart-box">
-      <div class="chart-title">合計 勝率</div>
-      <canvas id="totalChart"></canvas>
-      <div class="chart-note" id="totalSummary"></div>
-    </div>
+
+    <!-- ① 先行 -->
     <div class="chart-box">
       <div class="chart-title">先行 勝率</div>
       <canvas id="firstChart"></canvas>
       <div class="chart-note" id="firstSummary"></div>
     </div>
+
+    <!-- ② 後攻 -->
     <div class="chart-box">
       <div class="chart-title">後攻 勝率</div>
       <canvas id="secondChart"></canvas>
       <div class="chart-note" id="secondSummary"></div>
     </div>
+
+    <!-- ③ 合計 -->
+    <div class="chart-box">
+      <div class="chart-title">合計 勝率</div>
+      <canvas id="totalChart"></canvas>
+      <div class="chart-note" id="totalSummary"></div>
+    </div>
+
   </div>
 </div>
 
@@ -246,6 +248,7 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
+  /* ▼ 備考の開閉イベント */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content=toggle.nextElementSibling;
@@ -280,11 +283,6 @@ function updateCharts(filter=""){
   if(secondChart) secondChart.destroy();
   if(totalChart) totalChart.destroy();
 
-  totalChart=new Chart(document.getElementById("totalChart"),{
-    type:"doughnut",
-    data:{labels:["勝ち","負け"],datasets:[{data:[tw,tl],backgroundColor:[red,blue]}]}
-  });
-
   firstChart=new Chart(document.getElementById("firstChart"),{
     type:"doughnut",
     data:{labels:["勝ち","負け"],datasets:[{data:[fw,fl],backgroundColor:[red,blue]}]}
@@ -295,14 +293,19 @@ function updateCharts(filter=""){
     data:{labels:["勝ち","負け"],datasets:[{data:[sw,sl],backgroundColor:[red,blue]}]}
   });
 
-  document.getElementById("totalSummary").textContent =
-    tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
+  totalChart=new Chart(document.getElementById("totalChart"),{
+    type:"doughnut",
+    data:{labels:["勝ち","負け"],datasets:[{data:[tw,tl],backgroundColor:[red,blue]}]}
+  });
 
   document.getElementById("firstSummary").textContent =
     fw+fl ? `勝率 ${Math.round(fw/(fw+fl)*100)}%` : "データなし";
 
   document.getElementById("secondSummary").textContent =
     sw+sl ? `勝率 ${Math.round(sw/(sw+sl)*100)}%` : "データなし";
+
+  document.getElementById("totalSummary").textContent =
+    tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
 }
 
 /* ▼ フィルタ変更 */
