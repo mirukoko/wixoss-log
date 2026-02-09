@@ -71,7 +71,7 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考欄（セル内で自然に展開） */
+/* ▼ 備考欄（セル内で展開・高さ固定・内部スクロール） */
 .note-content{
   display:none;
   margin-top:6px;
@@ -81,6 +81,8 @@ td:nth-child(7){
   border-radius:6px;
   word-break:break-word;
   font-size: inherit;
+  max-height:120px;     /* ← 高さ固定 */
+  overflow-y:auto;      /* ← 内部スクロール */
 }
 
 /* ▼ グラフレイアウト調整 */
