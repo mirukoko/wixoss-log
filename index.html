@@ -59,8 +59,10 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
+/* ▼ 備考セルの横幅を固定（画面が動かないようにする） */
 td:nth-child(7){
   min-width: 260px;
+  max-width: 260px;   /* ← 横幅固定（重要） */
 }
 
 /* ▼ 備考開閉用 */
@@ -71,7 +73,7 @@ td:nth-child(7){
   font-size: inherit;
 }
 
-/* ▼ 備考欄（セル内で展開・高さ固定・内部スクロール） */
+/* ▼ 備考欄（セル内で展開・横幅固定） */
 .note-content{
   display:none;
   margin-top:6px;
@@ -81,8 +83,9 @@ td:nth-child(7){
   border-radius:6px;
   word-break:break-word;
   font-size: inherit;
-  max-height:120px;     /* ← 高さ固定 */
-  overflow-y:auto;      /* ← 内部スクロール */
+
+  width: 240px;        /* ← 横幅固定（展開前後で変わらない） */
+  box-sizing: border-box;
 }
 
 /* ▼ グラフレイアウト調整 */
