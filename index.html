@@ -92,22 +92,17 @@ td:nth-child(7){
 .charts-container{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;               /* ← 余白をさらに狭く */
+  gap:8px;
   justify-content:center;
 }
 
-/* 合計は1段目で横幅いっぱい */
-.chart-box:first-child{
-  width:100%;
-}
-
-/* グラフを小さくし、横余白を削る */
+/* ▼ グラフをすべて同じサイズにする */
 .chart-box{
   background:#181c2a;
   border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
-  padding:4px;           /* ← 8px → 4px に変更（余白削減） */
-  width:110px;           /* ← 130px → 110px に変更（さらに小さく） */
+  padding:4px;
+  width:110px;   /* ← 全グラフ共通サイズ */
   text-align:center;
 }
 
