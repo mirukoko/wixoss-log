@@ -33,9 +33,19 @@ h1{
 }
 
 /* ▼ テーブル（スマホ最適化） */
-table{
-  width:100%;border-collapse:collapse;font-size:.85rem;
+.table-wrapper{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
+
+/* ← テーブル幅を固定して横スクロールを発生させる */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.85rem;
+  min-width: 900px;
+}
+
 th,td{
   border:1px solid rgba(192,198,216,.3);
   padding:6px 8px;vertical-align:top;
@@ -50,10 +60,20 @@ th{
 }
 .note-reflect{color:#E6D37A;}
 
-/* ▼ テーブルを横スクロール可能に */
-.table-wrapper{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
+/* 備考欄を広めに */
+td:nth-child(7){
+  min-width: 260px;
+}
+
+/* ▼ 備考開閉用 */
+.note-toggle{
+  cursor:pointer;
+  color:#E6D37A;
+  user-select:none;
+}
+.note-content{
+  display:none;
+  margin-top:6px;
 }
 
 /* ▼ グラフ */
@@ -179,12 +199,26 @@ function renderTable(filter=""){
       <td>${m.order}</td>
       <td>${m.result}</td>
       <td>
-        <div>📝 ${m.noteResult||""}</div>
-        <div class="note-divider"></div>
-        <div class="note-reflect">💡 ${m.noteReflect||""}</div>
+        <div class="note-toggle">▶ 備考を開く</div>
+        <div class="note-content">
+          <div>📝 ${m.noteResult || ""}</div>
+          <div class="note-divider"></div>
+          <div class="note-reflect">💡 ${m.noteReflect || ""}</div>
+        </div>
       </td>
     `;
     tb.appendChild(tr);
+  });
+
+  /* ▼ 備考の開閉イベント */
+  tb.querySelectorAll(".note-toggle").forEach(toggle=>{
+    toggle.addEventListener("click",()=>{
+      const content=toggle.nextElementSibling;
+      const isOpen=content.style.display==="block";
+
+      content.style.display=isOpen?"none":"block";
+      toggle.textContent=isOpen?"▶ 備考を開く":"▼ 備考を閉じる";
+    });
   });
 
   updateCharts(filter);
@@ -222,7 +256,7 @@ function updateCharts(filter=""){
   });
 
   secondChart=new Chart(document.getElementById("secondChart"),{
-    type:"doughnut",
+    type:"doughn
     data:{labels:["勝ち","負け"],datasets:[{data:[sw,sl],backgroundColor:[red,blue]}]}
   });
 
