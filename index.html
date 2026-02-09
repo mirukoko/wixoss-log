@@ -7,88 +7,72 @@
 
 <style>
 /* ============================
-   🌌 全体背景（ネオン + 微細ノイズ）
-   ============================ */
+   全体
+============================ */
 body{
   margin:0;
   padding:16px;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background:#05070d;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(0,150,255,0.08), transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(0,150,255,0.05), transparent 60%);
+  font-family:system-ui,sans-serif;
+  background:#0b0e14;
   color:#e3e7ff;
 }
 
-/* タイトル */
 h1{
   margin:0 0 1em;
   font-size:1.6rem;
   text-align:center;
-  color:#4fc3f7;
-  text-shadow:0 0 10px rgba(79,195,247,0.8);
+  color:#4fa3f7;
 }
 
 /* ============================
-   🔵 JSON 読み込みボタン（ネオン）
-   ============================ */
+   読み込みボタン（軽量）
+============================ */
 #loadJsonBtn{
   display:block;
   width:100%;
-  padding:14px;
-  background: linear-gradient(135deg, #0288d1, #26c6da);
+  padding:12px;
+  background:#1e88e5;
   color:#fff;
   border:none;
-  border-radius:10px;
+  border-radius:8px;
   font-size:1rem;
   margin-bottom:16px;
-  cursor:pointer;
-  box-shadow:0 0 12px rgba(0,150,255,0.5);
-  transition:0.25s ease;
-}
-#loadJsonBtn:hover{
-  box-shadow:0 0 20px rgba(0,200,255,0.8);
-  transform:translateY(-2px);
 }
 
 /* ============================
-   🧊 フレーム（ガラス + ネオン）
-   ============================ */
+   フレーム（軽量）
+============================ */
 .frame{
-  background:rgba(10,15,25,0.6);
-  border:1px solid rgba(0,150,255,0.4);
-  border-radius:12px;
-  padding:16px;
+  background:#141824;
+  border:1px solid rgba(192,198,216,.25);
+  border-radius:10px;
+  padding:12px;
   margin-bottom:16px;
-  box-shadow:0 0 12px rgba(0,150,255,0.25);
-  backdrop-filter:blur(6px);
 }
+
 .frame-title{
   font-size:1rem;
   margin-bottom:8px;
-  color:#4fc3f7;
-  font-weight:600;
-  text-shadow:0 0 6px rgba(79,195,247,0.8);
+  color:#4fa3f7;
 }
 
 /* ============================
-   📊 グラフボックス（ネオン）
-   ============================ */
+   グラフ（元の配置を維持）
+============================ */
 .charts-container{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  gap:8px;
   justify-content:center;
 }
 
 .chart-box{
-  background:rgba(10,20,35,0.7);
-  border:1px solid rgba(0,150,255,0.4);
-  border-radius:10px;
-  padding:6px;
-  width:120px;
+  background:#181c2a;
+  border:1px solid rgba(192,198,216,.25);
+  border-radius:8px;
+  padding:4px;
+  width:110px;
   text-align:center;
-  box-shadow:0 0 10px rgba(0,150,255,0.25);
 }
 
 .chart-box canvas{
@@ -99,9 +83,9 @@ h1{
 .chart-title{
   font-size:.75rem;
   margin-bottom:4px;
-  color:#4fc3f7;
-  text-shadow:0 0 6px rgba(79,195,247,0.8);
+  color:#cfd8e3;
 }
+
 .chart-note{
   font-size:.7rem;
   margin-top:4px;
@@ -109,8 +93,8 @@ h1{
 }
 
 /* ============================
-   📋 テーブル（未来的ネオン）
-   ============================ */
+   テーブル（軽量・読みやすい）
+============================ */
 .table-wrapper{
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
@@ -119,38 +103,34 @@ h1{
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:.9rem;
+  font-size:.85rem;
   min-width:900px;
-  background:rgba(10,15,25,0.6);
-  border-radius:10px;
-  overflow:hidden;
 }
 
 th{
-  background:linear-gradient(90deg, #0d1b2a, #0a2a43);
-  color:#4fc3f7;
-  text-shadow:0 0 4px rgba(79,195,247,0.8);
-  border-bottom:1px solid rgba(0,150,255,0.4);
-  padding:8px;
+  background:#1c2738;
+  color:#cfd8e3;
+  font-size:.75rem;
+  padding:6px 8px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 td{
+  padding:6px 8px;
   border-bottom:1px solid rgba(255,255,255,0.05);
-  padding:8px;
 }
 
 tr:hover td{
-  background:rgba(0,150,255,0.08);
-  transition:0.2s ease;
+  background:#1a2330;
 }
 
 .lose-row{
-  background:rgba(27,34,48,0.7);
+  background:#1b2230;
 }
 
 /* ============================
-   📝 備考欄（ネオンカード）
-   ============================ */
+   備考欄（軽量）
+============================ */
 td:nth-child(7){
   min-width:248px;
   max-width:248px;
@@ -158,56 +138,40 @@ td:nth-child(7){
 
 .note-toggle{
   cursor:pointer;
-  color:#4fc3f7;
-  text-shadow:0 0 6px rgba(79,195,247,0.8);
+  color:#4fa3f7;
   user-select:none;
-  transition:0.2s ease;
-}
-.note-toggle:hover{
-  color:#81d4fa;
-  text-shadow:0 0 10px rgba(129,212,250,1);
 }
 
 .note-content{
   margin-top:6px;
   padding:6px;
-  background:rgba(10,20,35,0.8);
-  border:1px solid rgba(0,150,255,0.5);
-  border-radius:10px;
-  word-break:break-word;
+  background:#141824;
+  border:1px solid rgba(192,198,216,.25);
+  border-radius:6px;
   width:256px;
   box-sizing:border-box;
 
-  /* アニメーション */
   max-height:0;
   opacity:0;
   overflow:hidden;
-  transition:max-height 0.35s ease, opacity 0.35s ease, box-shadow 0.3s ease;
-
-  box-shadow:0 0 12px rgba(0,150,255,0.3);
-}
-
-.note-content[data-open="true"]{
-  box-shadow:0 0 18px rgba(0,200,255,0.5);
+  transition:max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .note-divider{
-  border-top:1px dashed rgba(192,198,216,.5);
+  border-top:1px dashed rgba(192,198,216,.4);
   margin:4px 0;
 }
+
 .note-reflect{
   color:#E6D37A;
 }
 
 /* ============================
-   📱 スマホ最適化
-   ============================ */
+   スマホ最適化
+============================ */
 @media (max-width:600px){
   table{
     font-size:1rem;
-  }
-  .chart-box{
-    width:140px;
   }
   .note-content{
     width:100%;
@@ -232,23 +196,28 @@ td:nth-child(7){
   </select>
 
   <div class="charts-container">
+
+    <!-- ① 先行 -->
     <div class="chart-box">
       <div class="chart-title">先行 勝率</div>
       <canvas id="firstChart"></canvas>
       <div class="chart-note" id="firstSummary"></div>
     </div>
 
+    <!-- ② 後攻 -->
     <div class="chart-box">
       <div class="chart-title">後攻 勝率</div>
       <canvas id="secondChart"></canvas>
       <div class="chart-note" id="secondSummary"></div>
     </div>
 
+    <!-- ③ 合計 -->
     <div class="chart-box">
       <div class="chart-title">合計 勝率</div>
       <canvas id="totalChart"></canvas>
       <div class="chart-note" id="totalSummary"></div>
     </div>
+
   </div>
 </div>
 
@@ -269,7 +238,7 @@ td:nth-child(7){
 </div>
 
 <script>
-/* ======== JS はあなたのコードをそのまま使用（機能は一切変更なし） ======== */
+/* ======== JS（機能は一切変更なし） ======== */
 
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
@@ -380,7 +349,7 @@ function updateCharts(filter=""){
   });
 
   const tw=fw+sw, tl=fl+sl;
-  const red="#ff5252", blue="#4fc3f7";
+  const red="#e53935", blue="#1e88e5";
 
   if(firstChart) firstChart.destroy();
   if(secondChart) secondChart.destroy();
