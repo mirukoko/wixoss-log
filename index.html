@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WIXOSS MATCH LOG（閲覧専用）</title>
+<title>WIXOSS MATCH LOG</title>
 
 <style>
 /* ============================
-   全体
+   全体（白背景・黒文字）
 ============================ */
 body{
   margin:0;
   padding:16px;
   font-family:system-ui,sans-serif;
-  background:#0b0e14;
-  color:#e3e7ff;
+  background:#ffffff;
+  color:#000000;
 }
 
 h1{
   margin:0 0 1em;
   font-size:1.6rem;
   text-align:center;
-  color:#4fa3f7;
+  color:#1e88e5;
 }
 
 /* ============================
@@ -40,11 +40,11 @@ h1{
 }
 
 /* ============================
-   フレーム（軽量）
+   フレーム（白背景に合わせて軽量）
 ============================ */
 .frame{
-  background:#141824;
-  border:1px solid rgba(192,198,216,.25);
+  background:#f5f7fa;
+  border:1px solid rgba(0,0,0,.15);
   border-radius:10px;
   padding:12px;
   margin-bottom:16px;
@@ -53,7 +53,7 @@ h1{
 .frame-title{
   font-size:1rem;
   margin-bottom:8px;
-  color:#4fa3f7;
+  color:#1e88e5;
 }
 
 /* ============================
@@ -67,8 +67,8 @@ h1{
 }
 
 .chart-box{
-  background:#181c2a;
-  border:1px solid rgba(192,198,216,.25);
+  background:#ffffff;
+  border:1px solid rgba(0,0,0,.15);
   border-radius:8px;
   padding:4px;
   width:110px;
@@ -83,17 +83,17 @@ h1{
 .chart-title{
   font-size:.75rem;
   margin-bottom:4px;
-  color:#cfd8e3;
+  color:#333333;
 }
 
 .chart-note{
   font-size:.7rem;
   margin-top:4px;
-  color:#9fa6c5;
+  color:#666666;
 }
 
 /* ============================
-   テーブル（軽量・読みやすい）
+   テーブル（白背景用）
 ============================ */
 .table-wrapper{
   overflow-x:auto;
@@ -105,31 +105,32 @@ table{
   border-collapse:collapse;
   font-size:.85rem;
   min-width:900px;
+  background:#ffffff;
 }
 
 th{
-  background:#1c2738;
-  color:#cfd8e3;
+  background:#e3e9f0;
+  color:#000000;
   font-size:.75rem;
   padding:6px 8px;
-  border-bottom:1px solid rgba(255,255,255,0.1);
+  border-bottom:1px solid rgba(0,0,0,0.15);
 }
 
 td{
   padding:6px 8px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
+  border-bottom:1px solid rgba(0,0,0,0.08);
 }
 
 tr:hover td{
-  background:#1a2330;
+  background:#f0f4f8;
 }
 
 .lose-row{
-  background:#1b2230;
+  background:#f7eaea;
 }
 
 /* ============================
-   備考欄（軽量）
+   備考欄（白背景用）
 ============================ */
 td:nth-child(7){
   min-width:248px;
@@ -138,15 +139,15 @@ td:nth-child(7){
 
 .note-toggle{
   cursor:pointer;
-  color:#4fa3f7;
+  color:#1e88e5;
   user-select:none;
 }
 
 .note-content{
   margin-top:6px;
   padding:6px;
-  background:#141824;
-  border:1px solid rgba(192,198,216,.25);
+  background:#ffffff;
+  border:1px solid rgba(0,0,0,.15);
   border-radius:6px;
   width:256px;
   box-sizing:border-box;
@@ -158,12 +159,12 @@ td:nth-child(7){
 }
 
 .note-divider{
-  border-top:1px dashed rgba(192,198,216,.4);
+  border-top:1px dashed rgba(0,0,0,.25);
   margin:4px 0;
 }
 
 .note-reflect{
-  color:#E6D37A;
+  color:#8a6d00;
 }
 
 /* ============================
@@ -184,7 +185,7 @@ td:nth-child(7){
 
 <body>
 
-<h1>WIXOSS MATCH LOG（閲覧専用）</h1>
+<h1>WIXOSS MATCH LOG</h1>
 
 <button id="loadJsonBtn">JSON を読み込む（OneDrive から選択）</button>
 
