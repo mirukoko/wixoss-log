@@ -62,7 +62,7 @@ h1{
 .charts-container{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:12px;
   justify-content:center;
 }
 
@@ -70,14 +70,20 @@ h1{
   background:#181c2a;
   border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
-  padding:4px;
+  padding:6px;
   width:140px;
   text-align:center;
 }
 
+/* ▼ 折れ線グラフだけ幅を広げる */
+.chart-box.wide{
+  width:260px;
+}
+
+/* ▼ canvas を responsive にする */
 .chart-box canvas{
-  width:120px !important;
-  height:120px !important;
+  width:100% !important;
+  height:auto !important;
 }
 
 .chart-title{
@@ -214,8 +220,8 @@ td:nth-child(7){
       <div class="chart-note" id="totalSummary"></div>
     </div>
 
-    <!-- ▼ 新規追加：直近10戦 -->
-    <div class="chart-box">
+    <!-- ▼ 新規追加：直近10戦（横幅広め） -->
+    <div class="chart-box wide">
       <div class="chart-title">直近10戦</div>
       <canvas id="recentChart"></canvas>
     </div>
@@ -443,6 +449,8 @@ function updateCharts(filter=""){
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       scales: {
         y: {
           min: 0,
