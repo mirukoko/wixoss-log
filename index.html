@@ -57,11 +57,17 @@ h1{
 }
 
 /* ============================
-   グラフ
+   グラフ配置（上2つ・下1つ）
 ============================ */
 .charts-container{
   display:flex;
-  flex-wrap:wrap;
+  flex-direction:column;
+  gap:16px;
+  align-items:center;
+}
+
+.chart-row{
+  display:flex;
   gap:12px;
   justify-content:center;
 }
@@ -75,7 +81,7 @@ h1{
   text-align:center;
 }
 
-/* ▼ 折れ線グラフだけ幅を広げる */
+/* ▼ 折れ線グラフだけ横幅広め */
 .chart-box.wide{
   width:260px;
 }
@@ -202,25 +208,29 @@ td:nth-child(7){
 
   <div class="charts-container">
 
-    <div class="chart-box">
-      <div class="chart-title">先攻 勝率</div>
-      <canvas id="firstChart"></canvas>
-      <div class="chart-note" id="firstSummary"></div>
+    <!-- 上段：先攻・後攻 -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">先攻 勝率</div>
+        <canvas id="firstChart"></canvas>
+        <div class="chart-note" id="firstSummary"></div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-title">後攻 勝率</div>
+        <canvas id="secondChart"></canvas>
+        <div class="chart-note" id="secondSummary"></div>
+      </div>
     </div>
 
-    <div class="chart-box">
-      <div class="chart-title">後攻 勝率</div>
-      <canvas id="secondChart"></canvas>
-      <div class="chart-note" id="secondSummary"></div>
-    </div>
-
+    <!-- 中段：合計 -->
     <div class="chart-box">
       <div class="chart-title">合計 勝率</div>
       <canvas id="totalChart"></canvas>
       <div class="chart-note" id="totalSummary"></div>
     </div>
 
-    <!-- ▼ 新規追加：直近10戦（横幅広め） -->
+    <!-- 下段：直近10戦 -->
     <div class="chart-box wide">
       <div class="chart-title">直近10戦</div>
       <canvas id="recentChart"></canvas>
@@ -427,7 +437,7 @@ function updateCharts(filter=""){
   document.getElementById("totalSummary").textContent =
     tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
 
-  /* ▼ 直近10戦 折れ線グラフ */
+  /* ▼ 直近10戦 折れ線グラフ（縦長防止） */
   let filtered = matches.filter(m => !filter || normalizeLrig(m.myLrig) === filter);
   let last10 = filtered.slice(-10);
   let recentData = last10.map(m => m.result === "勝ち" ? 1 : 0);
@@ -450,7 +460,7 @@ function updateCharts(filter=""){
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,   /* ← 縦長防止 */
       scales: {
         y: {
           min: 0,
