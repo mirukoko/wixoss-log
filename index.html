@@ -71,13 +71,13 @@ h1{
   border:1px solid rgba(192,198,216,.4);
   border-radius:8px;
   padding:4px;
-  width:110px;
+  width:140px;
   text-align:center;
 }
 
 .chart-box canvas{
-  width:100px !important;
-  height:100px !important;
+  width:120px !important;
+  height:120px !important;
 }
 
 .chart-title{
@@ -214,6 +214,12 @@ td:nth-child(7){
       <div class="chart-note" id="totalSummary"></div>
     </div>
 
+    <!-- ▼ 新規追加：直近10戦 -->
+    <div class="chart-box">
+      <div class="chart-title">直近10戦</div>
+      <canvas id="recentChart"></canvas>
+    </div>
+
   </div>
 </div>
 
@@ -247,7 +253,7 @@ const LRIG_COLORS = {
 };
 
 let matches=[];
-let firstChart=null, secondChart=null, totalChart=null;
+let firstChart=null, secondChart=null, totalChart=null, recentChart=null;
 
 /* ============================
    JSON 読み込み
@@ -308,7 +314,6 @@ function renderTable(filter=""){
   matches.forEach(m=>{
     if(filter && normalizeLrig(m.myLrig)!==filter) return;
 
-    /* ▼ 古いデータの「先行」を吸収して先攻に統一 */
     let order = m.order;
     if(order === "先行") order = "先攻";
 
@@ -342,7 +347,6 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
-  /* ▼ 備考の開閉 */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content = toggle.nextElementSibling;
@@ -367,7 +371,7 @@ function renderTable(filter=""){
 }
 
 /* ============================
-   グラフ更新
+   グラフ更新（直近10戦追加）
 ============================ */
 function updateCharts(filter=""){
   let fw=0,fl=0,sw=0,sl=0;
@@ -391,6 +395,7 @@ function updateCharts(filter=""){
   if(firstChart) firstChart.destroy();
   if(secondChart) secondChart.destroy();
   if(totalChart) totalChart.destroy();
+  if(recentChart) recentChart.destroy();
 
   firstChart=new Chart(document.getElementById("firstChart"),{
     type:"doughnut",
@@ -415,6 +420,38 @@ function updateCharts(filter=""){
 
   document.getElementById("totalSummary").textContent =
     tw+tl ? `勝率 ${Math.round(tw/(tw+tl)*100)}%` : "データなし";
+
+  /* ▼ 直近10戦 折れ線グラフ */
+  let filtered = matches.filter(m => !filter || normalizeLrig(m.myLrig) === filter);
+  let last10 = filtered.slice(-10);
+  let recentData = last10.map(m => m.result === "勝ち" ? 1 : 0);
+  let labels = last10.map((_, i) => `#${i+1}`);
+
+  recentChart = new Chart(document.getElementById("recentChart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "勝敗（1=勝ち, 0=負け）",
+        data: recentData,
+        borderColor: "#42a5f5",
+        backgroundColor: "rgba(66,165,245,0.3)",
+        borderWidth: 2,
+        tension: 0.2,
+        pointRadius: 4,
+        pointBackgroundColor: recentData.map(v => v ? "#ff77aa" : "#1e88e5")
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          min: 0,
+          max: 1,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
 }
 
 document.getElementById("filterLrig").addEventListener("change",e=>{
