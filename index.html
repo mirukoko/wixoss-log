@@ -197,7 +197,7 @@ td:nth-child(7){
   <div class="charts-container">
 
     <div class="chart-box">
-      <div class="chart-title">先行 勝率</div>
+      <div class="chart-title">先攻 勝率</div>
       <canvas id="firstChart"></canvas>
       <div class="chart-note" id="firstSummary"></div>
     </div>
@@ -234,7 +234,31 @@ td:nth-child(7){
 </div>
 
 <script>
-/* ======== JS（機能はそのまま） ======== */
+/* ============================
+   色コード
+============================ */
+const LRIG_COLORS = {
+  red:"#ff77aa",
+  blue:"#77ddff",
+  green:"#99ff77",
+  black:"#bb77ff",
+  white:"#ffee55",
+  colorless:"#ffffff"
+};
+
+/* ============================
+   色抽出
+============================ */
+function extractColor(name){
+  if(!name) return null;
+  if(name.includes("赤")) return "red";
+  if(name.includes("青")) return "blue";
+  if(name.includes("緑")) return "green";
+  if(name.includes("黒")) return "black";
+  if(name.includes("白")) return "white";
+  if(name.includes("無色")) return "colorless";
+  return null;
+}
 
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
@@ -286,16 +310,31 @@ function renderTable(filter=""){
   matches.forEach(m=>{
     if(filter && normalizeLrig(m.myLrig)!==filter) return;
 
+    /* ▼ 古いデータの「先行」を吸収して先攻に統一 */
+    let order = m.order;
+    if(order === "先行") order = "先攻";
+
+    const myColor = extractColor(m.myLrig);
+    const oppColor = extractColor(m.oppLrig);
+
     const tr=document.createElement("tr");
     if(m.result==="負け") tr.classList.add("lose-row");
 
     tr.innerHTML=`
       <td>${m.date}</td>
       <td>${m.place}</td>
-      <td>${m.myLrig}</td>
-      <td>${m.oppLrig}</td>
-      <td>${m.order}</td>
+
+      <td style="color:${LRIG_COLORS[myColor] || '#e3e7ff'};">
+        ${m.myLrig}
+      </td>
+
+      <td style="color:${LRIG_COLORS[oppColor] || '#e3e7ff'};">
+        ${m.oppLrig}
+      </td>
+
+      <td>${order}</td>
       <td>${m.result}</td>
+
       <td>
         <div class="note-toggle">▶ 備考を開く</div>
         <div class="note-content" data-open="false">
@@ -337,7 +376,11 @@ function updateCharts(filter=""){
   matches.forEach(m=>{
     if(filter && normalizeLrig(m.myLrig)!==filter) return;
 
-    if(m.order==="先行"){
+    /* ▼ 古いデータの「先行」を吸収 */
+    let order = m.order;
+    if(order === "先行") order = "先攻";
+
+    if(order === "先攻"){
       if(m.result==="勝ち") fw++; else fl++;
     } else {
       if(m.result==="勝ち") sw++; else sl++;
