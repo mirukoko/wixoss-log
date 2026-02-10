@@ -25,7 +25,7 @@ h1{
 }
 
 /* ============================
-   読み込みボタン（軽量）
+   読み込みボタン
 ============================ */
 #loadJsonBtn{
   display:block;
@@ -40,7 +40,7 @@ h1{
 }
 
 /* ============================
-   フレーム（元の色に近い軽量版）
+   フレーム
 ============================ */
 .frame{
   background:#141824;
@@ -57,7 +57,7 @@ h1{
 }
 
 /* ============================
-   グラフ（元の配置）
+   グラフ
 ============================ */
 .charts-container{
   display:flex;
@@ -93,7 +93,7 @@ h1{
 }
 
 /* ============================
-   テーブル（元の色を維持）
+   テーブル
 ============================ */
 .table-wrapper{
   overflow-x:auto;
@@ -128,7 +128,7 @@ tr:hover td{
 }
 
 /* ============================
-   備考欄（元の色 × 軽量）
+   備考欄
 ============================ */
 td:nth-child(7){
   min-width:248px;
@@ -235,7 +235,7 @@ td:nth-child(7){
 
 <script>
 /* ============================
-   色コード
+   色コード（PC版と同じ）
 ============================ */
 const LRIG_COLORS = {
   red:"#ff77aa",
@@ -246,23 +246,12 @@ const LRIG_COLORS = {
   colorless:"#ffffff"
 };
 
-/* ============================
-   色抽出
-============================ */
-function extractColor(name){
-  if(!name) return null;
-  if(name.includes("赤")) return "red";
-  if(name.includes("青")) return "blue";
-  if(name.includes("緑")) return "green";
-  if(name.includes("黒")) return "black";
-  if(name.includes("白")) return "white";
-  if(name.includes("無色")) return "colorless";
-  return null;
-}
-
 let matches=[];
 let firstChart=null, secondChart=null, totalChart=null;
 
+/* ============================
+   JSON 読み込み
+============================ */
 document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
   const input=document.createElement("input");
   input.type="file";
@@ -288,8 +277,14 @@ document.getElementById("loadJsonBtn").addEventListener("click", ()=>{
   input.click();
 });
 
+/* ============================
+   ルリグ名の装飾除去
+============================ */
 function normalizeLrig(name){ return name.replace(/（.*?）/g,""); }
 
+/* ============================
+   フィルタ更新
+============================ */
 function renderFilterOptions(){
   const set=new Set(matches.map(m=>normalizeLrig(m.myLrig)).filter(Boolean));
   const sel=document.getElementById("filterLrig");
@@ -301,6 +296,9 @@ function renderFilterOptions(){
   });
 }
 
+/* ============================
+   テーブル描画
+============================ */
 function renderTable(filter=""){
   const tb=document.querySelector("#matchTable tbody");
   tb.innerHTML="";
@@ -314,9 +312,6 @@ function renderTable(filter=""){
     let order = m.order;
     if(order === "先行") order = "先攻";
 
-    const myColor = extractColor(m.myLrig);
-    const oppColor = extractColor(m.oppLrig);
-
     const tr=document.createElement("tr");
     if(m.result==="負け") tr.classList.add("lose-row");
 
@@ -324,11 +319,11 @@ function renderTable(filter=""){
       <td>${m.date}</td>
       <td>${m.place}</td>
 
-      <td style="color:${LRIG_COLORS[myColor] || '#e3e7ff'};">
+      <td style="color:${LRIG_COLORS[m.myColor] || '#e3e7ff'};">
         ${m.myLrig}
       </td>
 
-      <td style="color:${LRIG_COLORS[oppColor] || '#e3e7ff'};">
+      <td style="color:${LRIG_COLORS[m.oppColor] || '#e3e7ff'};">
         ${m.oppLrig}
       </td>
 
@@ -347,6 +342,7 @@ function renderTable(filter=""){
     tb.appendChild(tr);
   });
 
+  /* ▼ 備考の開閉 */
   tb.querySelectorAll(".note-toggle").forEach(toggle=>{
     toggle.addEventListener("click",()=>{
       const content = toggle.nextElementSibling;
@@ -370,13 +366,15 @@ function renderTable(filter=""){
   updateCharts(filter);
 }
 
+/* ============================
+   グラフ更新
+============================ */
 function updateCharts(filter=""){
   let fw=0,fl=0,sw=0,sl=0;
 
   matches.forEach(m=>{
     if(filter && normalizeLrig(m.myLrig)!==filter) return;
 
-    /* ▼ 古いデータの「先行」を吸収 */
     let order = m.order;
     if(order === "先行") order = "先攻";
 
