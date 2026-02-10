@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WIXOSS MATCH LOG</title>
 
+<!-- ▼ PWA 用 manifest 読み込み -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0c14">
+
 <style>
 /* ============================
    全体（ダーク背景・白文字）
@@ -460,7 +464,7 @@ function updateCharts(filter=""){
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,   /* ← 縦長防止 */
+      maintainAspectRatio: true,
       scales: {
         y: {
           min: 0,
@@ -472,9 +476,15 @@ function updateCharts(filter=""){
   });
 }
 
+/* ▼ フィルタ変更 */
 document.getElementById("filterLrig").addEventListener("change",e=>{
   renderTable(e.target.value);
 });
+
+/* ▼ PWA 用 Service Worker 登録 */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
 </script>
 
 </body>
